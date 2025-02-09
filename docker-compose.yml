@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: gesvitalpro_app
+    container_name: gesvitalpro_app
+    ports:
+      - "9000:9000"
+    volumes:
+      - .:/var/www
+    networks:
+      - gesvitalpro_network
+
+networks:
+  gesvitalpro_network:
+    driver: bridge

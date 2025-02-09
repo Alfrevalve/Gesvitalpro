@@ -1,0 +1,98 @@
+/.phpunit.cache
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+.env
+.env.backup
+.env.production
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+auth.json
+npm-debug.log
+yarn-error.log
+/.fleet
+/.idea
+/.vscode
+
+# Archivos específicos de GesVitalPro
+/storage/app/public/*
+!/storage/app/public/.gitkeep
+/storage/logs/*
+!/storage/logs/.gitkeep
+/storage/framework/cache/*
+!/storage/framework/cache/.gitkeep
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitkeep
+/storage/framework/views/*
+!/storage/framework/views/.gitkeep
+/storage/framework/testing/*
+!/storage/framework/testing/.gitkeep
+
+# Archivos de configuración local
+*.local.php
+*.local.json
+*.local.yml
+*.local.yaml
+
+# Archivos de respaldo
+*.bak
+*.swp
+*.swo
+*~
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de dependencias y compilación
+/public/css
+/public/js
+/public/mix-manifest.json
+/public/vendor
+/public/uploads/*
+!/public/uploads/.gitkeep
+
+# Archivos de caché y logs
+*.log
+*.cache
+.php_cs.cache
+.php-cs-fixer.cache
+
+# Archivos de IDE y editores
+*.sublime-project
+*.sublime-workspace
+*.komodoproject
+.komodotools
+.idea/
+.project
+.settings/
+.classpath
+.c9/
+*.launch
+.settings/
+*.tmproj
+*.esproj
+nbproject/
+*.iml
+*.iws
+*.ipr
+
+# Archivos de testing
+/coverage
+.phpunit.cache
+.phpunit.result.cache
+/tests/coverage
+/tests/reports
+
+# Archivos de documentación generados
+/docs/api
+/docs/coverage
+/docs/phpdoc
+
+# Archivos temporales
+/tmp
+/temp

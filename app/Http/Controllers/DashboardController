@@ -1,0 +1,115 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Patient;
+use App\Models\Visita;
+use App\Models\Cirugia;
+use App\Models\Inventario;
+use App\Models\User;
+use App\Models\Attendance;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB; // Import the DB facade
+
+class DashboardController extends Controller
+{
+    public function index()
+    {
+        $data = [
+            // Métricas Principales
+            'total_patients' => Patient::count(),
+            'total_visits' => Visita::count(),
+            'total_surgeries' => Cirugia::count(),
+            'total_users' => User::count(), // Total de usuarios
+
+            // Métricas de Hoy
+            'today_visits' => Visita::whereDate('created_at', today())->count(),
+            'today_surgeries' => Cirugia::whereDate('fecha_hora', today())->count(), // Updated to use fecha_hora
+            'today_new_patients' => Patient::whereDate('created_at', today())->count(),
+            'today_staff_attendance' => Attendance::whereDate('date', today())->count(),
+
+            // Métricas Financieras
+            'monthly_revenue' => Visita::whereMonth('created_at', now()->month)->sum('cost'),
+            'yearly_revenue' => Visita::whereYear('created_at', now()->year)->sum('cost'),
+            'pending_payments' => Visita::where('payment_status', 'pending')->count(),
+            'overdue_payments' => Visita::where('payment_status', 'overdue')->count(),
+
+            // Métricas de Rendimiento
+            'average_visits_per_day' => round(Visita::whereMonth('created_at', now()->month)->count() / now()->daysInMonth, 2),
+            'satisfaction_rate' => Visita::count() > 0 ? round(Visita::where('satisfaction', '>=', 4)->count() / Visita::count() * 100, 2) : 0,
+
+            // Métricas de Inventario
+            'low_stock' => Inventario::where('quantity', '<=', 'min_stock')->count(),
+            'expired_products' => Inventario::whereDate('expiry_date', '<=', now())->count(),
+            'reorder_needed' => Inventario::whereRaw('quantity <= reorder_point')->count(),
+            'total_inventory_value' => Inventario::sum(DB::raw('quantity * unit_price')),
+
+            // Métricas de Personal
+            'active_doctors' => User::where('role', 'doctor')->where('status', 'active')->count(),
+            'active_nurses' => User::where('role', 'nurse')->where('status', 'active')->count(),
+            'total_staff' => User::where('role', '!=', 'patient')->count(),
+            'staff_attendance_rate' => round((Attendance::whereDate('date', today())->count() / User::count()) * 100, 2),
+
+            // Métricas de Cirugías
+            'pending_surgeries' => Cirugia::where('status', 'pendiente')->count(),
+            'completed_surgeries' => Cirugia::where('status', 'completada')->count(),
+            'cancelled_surgeries' => Cirugia::where('status', 'cancelada')->count(),
+            'this_week_surgeries' => Cirugia::whereBetween('fecha_hora', [now()->startOfWeek(), now()->endOfWeek()])->count(), // Updated to use fecha_hora
+
+            // Listas y Datos Detallados
+            'recent_patients' => Patient::latest()->take(5)->get(),
+            'upcoming_surgeries' => Cirugia::where('fecha_hora', '>=', now()) // Updated to use fecha_hora
+                                         ->where('status', 'pendiente')
+                                         ->orderBy('fecha_hora')
+                                         ->take(5)
+                                         ->get(),
+            'critical_inventory' => Inventario::where('quantity', '<=', 'min_stock')
+                                            ->orderBy('quantity')
+                                            ->take(5)
+                                            ->get(),
+            
+            // Métricas de Tendencias
+            'patient_growth' => [
+                'this_month' => Patient::whereMonth('created_at', now()->month)->count(),
+                'last_month' => Patient::whereMonth('created_at', now()->subMonth()->month)->count(),
+                'growth_rate' => $this->calculateGrowthRate(
+                    Patient::whereMonth('created_at', now()->subMonth()->month)->count(),
+                    Patient::whereMonth('created_at', now()->month)->count()
+                )
+            ],
+
+            // Métricas de Calidad
+            'average_wait_time' => Visita::whereMonth('created_at', now()->month)
+                                      ->avg(DB::raw('TIMESTAMPDIFF(MINUTE, created_at, attended_at)')),
+            'patient_satisfaction' => [
+                'excellent' => Visita::where('satisfaction', 5)->count(),
+                'good' => Visita::where('satisfaction', 4)->count(),
+                'average' => Visita::where('satisfaction', 3)->count(),
+                'poor' => Visita::where('satisfaction', '<', 3)->count(),
+            ],
+
+            // Análisis de Departamentos
+            'department_stats' => $this->getDepartmentStats(),
+        ];
+
+        if (isset($data)) {
+            return view('dashboard', compact('data'));
+        } else {
+            return redirect()->back()->withErrors(['message' => 'Data not available']);
+        }
+    }
+
+    private function calculateGrowthRate($previous, $current)
+    {
+        if ($previous == 0) return 100;
+        return round((($current - $previous) / $previous) * 100, 2);
+    }
+
+    private function getDepartmentStats()
+    {
+        return DB::table('visitas') // Updated to use visitas
+            ->select('department', DB::raw('count(*) as total'))
+            ->groupBy('department')
+            ->get();
+    }
+}
