@@ -21,6 +21,9 @@ class ReportController extends Controller
             return response()->json($visits);
         } catch (\Exception $e) {
             // Manejo de errores mejorado
+            Log::error('Error generando el informe de visitas: ' . $e->getMessage(), [
+                'user_id' => Auth::id(),
+            ]);
             return response()->json(['error' => 'Error generando el informe de visitas.'], 500);
         }
     }

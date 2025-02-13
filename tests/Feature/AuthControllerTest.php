@@ -55,4 +55,46 @@ class AuthControllerTest extends TestCase
 
         $response->assertRedirect('/login');
     }
+
+    public function test_registration_fails_without_email()
+    {
+        $response = $this->post('/register', [
+            'name' => 'Test User',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+
+        $response->assertStatus(422); // Unprocessable Entity
+        $this->assertDatabaseMissing('users', [
+            'name' => 'Test User',
+        ]);
+    }
+
+    public function test_registration_fails_with_duplicate_email()
+    {
+        User::create([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        $response = $this->post('/register', [
+            'name' => 'Another User',
+            'email' => 'test@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+
+        $response->assertStatus(422); // Unprocessable Entity
+    }
+
+    public function test_login_fails_with_invalid_credentials()
+    {
+        $response = $this->post('/login', [
+            'email' => 'nonexistent@example.com',
+            'password' => 'wrongpassword',
+        ]);
+
+        $response->assertStatus(401); // Unauthorized
+    }
 }

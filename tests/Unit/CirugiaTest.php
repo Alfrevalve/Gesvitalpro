@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use App\Models\Cirugia;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CirugiaTest extends TestCase
 {
@@ -24,6 +25,20 @@ class CirugiaTest extends TestCase
 
         $this->assertDatabaseHas('cirugias', [
             'hospital' => 'Test Hospital',
+        ]);
+    }
+
+    public function test_cirugia_creation_fails_without_patient_id()
+    {
+        $this->expectException(ModelNotFoundException::class);
+        
+        Cirugia::create([
+            'fecha_hora' => now(),
+            'hospital' => 'Test Hospital',
+            'equipo_requerido' => 'Test Equipo',
+            'consumibles' => 'Test Consumibles',
+            'personal_asignado' => 'Test Personal',
+            'tiempo_estimado' => '1 hora',
         ]);
     }
 
@@ -63,5 +78,13 @@ class CirugiaTest extends TestCase
         $this->assertDatabaseMissing('cirugias', [
             'hospital' => 'Test Hospital',
         ]);
+    }
+
+    public function test_cirugia_deletion_fails_for_non_existent_record()
+    {
+        $this->expectException(ModelNotFoundException::class);
+        
+        $cirugia = Cirugia::find(999); // Assuming this ID does not exist
+        $cirugia->delete();
     }
 }

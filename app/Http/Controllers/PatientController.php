@@ -5,10 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Paciente; 
 use Illuminate\Http\Request;
 use App\Services\ValidationService;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 
 class PatientController extends Controller
 {
     protected $validationService;
+
+    const HTTP_OK = 200;
+    const HTTP_CREATED = 201;
+    const HTTP_INTERNAL_SERVER_ERROR = 500;
 
     public function __construct(ValidationService $validationService)
     {
@@ -19,49 +26,41 @@ class PatientController extends Controller
     {
         $pacientes = Paciente::paginate(10);
 
-        if ($pacientes->isEmpty()) {
-            return view('pacientes.index'); // Cambiar a vista en lugar de JSON
-        }
-
-        return response()->json($pacientes);
+        return response()->json($pacientes->isEmpty() ? [] : $pacientes);
     }
 
     public function store(Request $request)
     {
-        $validatedData = $this->validationService->validate($request->all(), 'paciente')->validate(); // Usar el servicio para validar
-
-        // Saneamiento adicional
-        $validatedData['name'] = filter_var($validatedData['name'], FILTER_SANITIZE_STRING);
-        $validatedData['email'] = filter_var($validatedData['email'], FILTER_SANITIZE_EMAIL);
+        $validatedData = $this->validateAndSanitize($request);
 
         try {
             $paciente = Paciente::create($validatedData);
-            return response()->json(['message' => 'Paciente creado con éxito.'], 201);
+            return response()->json(['message' => 'Paciente creado con éxito.'], self::HTTP_CREATED);
+        } catch (QueryException $e) {
+            return $this->logError($e, 'Error de base de datos al crear el paciente', $request);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Error al crear el paciente.'], 500);
+            return $this->logError($e, 'Error al crear el paciente', $request);
         }
     }
 
     public function update(Request $request, $id)
     {
-        $validatedData = $this->validationService->validate($request->all(), 'paciente')->validate(); // Usar el servicio para validar
-
-        // Saneamiento adicional
-        $validatedData['name'] = filter_var($validatedData['name'], FILTER_SANITIZE_STRING);
-        $validatedData['email'] = filter_var($validatedData['email'], FILTER_SANITIZE_EMAIL);
+        $validatedData = $this->validateAndSanitize($request);
 
         try {
             $paciente = Paciente::findOrFail($id);
             $paciente->update($validatedData);
-            return response()->json(['message' => 'Paciente actualizado con éxito.'], 200);
+            return response()->json(['message' => 'Paciente actualizado con éxito.'], self::HTTP_OK);
+        } catch (QueryException $e) {
+            return $this->logError($e, 'Error de base de datos al actualizar el paciente', $request);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Error al actualizar el paciente.'], 500);
+            return $this->logError($e, 'Error al actualizar el paciente', $request);
         }
     }
 
     public function create()
     {
-        return view('pacientes.create'); // Retornar la vista de creación
+        return view('pacientes.create');
     }
 
     public function edit($id)
@@ -72,9 +71,30 @@ class PatientController extends Controller
 
     public function destroy($id)
     {
-        $paciente = Paciente::findOrFail($id);
-        $paciente->delete();
+        try {
+            $paciente = Paciente::findOrFail($id);
+            $paciente->delete();
+            return response()->json(['message' => 'Paciente eliminado con éxito.'], self::HTTP_OK);
+        } catch (QueryException $e) {
+            return $this->logError($e, 'Error de base de datos al eliminar el paciente');
+        } catch (\Exception $e) {
+            return $this->logError($e, 'Error al eliminar el paciente');
+        }
+    }
 
-        return response()->json(['message' => 'Paciente eliminado con éxito.'], 200);
+    private function logError($exception, $message, Request $request = null)
+    {
+        Log::error($message . ': ' . $exception->getMessage(), [
+            'request' => $request ? $request->all() : [],
+            'user_id' => Auth::id(),
+        ]);
+        return response()->json(['message' => $message], self::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+    private function sanitizeInput(array $data)
+    {
+        $data['name'] = filter_var($data['name'], FILTER_SANITIZE_STRING);
+        $data['email'] = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
+        return $data;
     }
 }

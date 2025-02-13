@@ -1,11 +1,4 @@
 <?php return array (
-  'laravel/pail' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Laravel\\Pail\\PailServiceProvider',
-    ),
-  ),
   'laravel/sail' => 
   array (
     'providers' => 

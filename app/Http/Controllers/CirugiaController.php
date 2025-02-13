@@ -57,7 +57,10 @@ class CirugiaController
             return redirect()->route('cirugias.index')
                 ->with('success', 'Cirugía creada con éxito.');
         } catch (QueryException $e) {
-            Log::error('Error de base de datos en creación de cirugía: ' . $e->getMessage());
+            Log::error('Error de base de datos en creación de cirugía: ' . $e->getMessage(), [
+                'request' => $request->all(),
+                'user_id' => Auth::id(),
+            ]);
             return back()->with('error', 'Error al crear la cirugía. Por favor, intente nuevamente.');
         } catch (\Exception $e) {
             Log::error('Error general en creación de cirugía: ' . $e->getMessage());

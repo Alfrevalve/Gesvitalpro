@@ -5,10 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Pagination\Paginator;
-use App\Models\Configuracion;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Cache;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,7 +15,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Registrar servicios adicionales si es necesario
+        // Registro de servicios personalizados
+        $this->app->singleton('audit', function ($app) {
+            return new \App\Services\AuditService();
+        });
     }
 
     /**
@@ -25,41 +26,54 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Configurar longitud por defecto para strings en migraciones
+        // Configuración de la base de datos
         Schema::defaultStringLength(191);
 
-        // Forzar HTTPS en producción
-        if ($this->app->environment('production')) {
-            URL::forceScheme('https');
-        }
-
-        // Usar Bootstrap para la paginación
-        Paginator::useBootstrap();
-
-        // Prevenir lazy loading en producción
+        // Prevenir lazy loading en desarrollo
         Model::preventLazyLoading(!$this->app->isProduction());
 
-        // Habilitar protección contra asignación masiva por defecto
-        Model::preventSilentlyDiscardingAttributes(!$this->app->isProduction());
+        // Variables globales para las vistas
+        View::share('appName', config('app.name'));
 
-        // Reglas de validación personalizadas
-        Validator::extend('alpha_spaces', function ($attribute, $value) {
-            return preg_match('/^[\pL\s]+$/u', $value);
-        }, 'El campo :attribute solo debe contener letras y espacios.');
-
-        Validator::extend('phone', function ($attribute, $value) {
-            return preg_match('/^([0-9\s\-\+\(\)]*)$/', $value);
-        }, 'El campo :attribute debe ser un número de teléfono válido.');
-
-        // Configurar manejo de errores personalizado
-        if (!$this->app->isLocal()) {
-            $this->app->singleton(
-                \Illuminate\Contracts\Debug\ExceptionHandler::class,
-                \App\Exceptions\Handler::class
-            );
+        // Caché global para configuraciones frecuentes
+        if (!$this->app->runningInConsole()) {
+            $this->cacheGlobalSettings();
         }
+    }
 
-        // Configurar observadores específicos para modelos auditables
-        Configuracion::observe(\App\Observers\AuditObserver::class);
+    /**
+     * Cachear configuraciones globales
+     */
+    protected function cacheGlobalSettings(): void
+    {
+        Cache::remember('navigation_menu', 86400, function () {
+            return [
+                [
+                    'title' => 'Dashboard',
+                    'route' => 'dashboard',
+                    'icon' => 'fas fa-tachometer-alt',
+                ],
+                [
+                    'title' => 'Cirugías',
+                    'route' => 'cirugias.index',
+                    'icon' => 'fas fa-procedures',
+                ],
+                [
+                    'title' => 'Pacientes',
+                    'route' => 'pacientes.index',
+                    'icon' => 'fas fa-users',
+                ],
+                [
+                    'title' => 'Reportes',
+                    'route' => 'reportes.index',
+                    'icon' => 'fas fa-chart-bar',
+                ],
+                [
+                    'title' => 'Configuración',
+                    'route' => 'configuraciones',
+                    'icon' => 'fas fa-cogs',
+                ]
+            ];
+        });
     }
 }

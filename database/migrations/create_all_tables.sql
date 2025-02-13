@@ -128,7 +128,7 @@ CREATE TABLE role_has_permissions (
 );
 
 CREATE TABLE cache (
-    key VARCHAR(255) UNIQUE NOT NULL,
+    `key` VARCHAR(255) UNIQUE NOT NULL,
     value TEXT NOT NULL,
     expiration INT NULL,
     created_at TIMESTAMP NULL,

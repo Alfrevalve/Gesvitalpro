@@ -1,105 +1,100 @@
 <?php
 
+use Illuminate\Support\Facades\Facade;
+use Illuminate\Support\ServiceProvider;
+
 return [
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'GesVitalPro'),
     'env' => env('APP_ENV', 'production'),
     'debug' => (bool) env('APP_DEBUG', false),
-    'url' => env('APP_URL', 'http://alfreval.com/gesvitalpro'),
-    'timezone' => env('APP_TIMEZONE', 'UTC'),
-    'locale' => env('APP_LOCALE', 'en'),
-    'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
-    'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
+    'url' => env('APP_URL', 'http://localhost'),
+    'asset_url' => env('ASSET_URL'),
+    'timezone' => 'America/Bogota',
+    'locale' => 'es',
+    'fallback_locale' => 'en',
+    'faker_locale' => 'es_ES',
+    'key' => env('APP_KEY'),
     'cipher' => 'AES-256-CBC',
-    'key' => env('APP_KEY', 'base64:aGRieHdsNnlldTB2Y3RzbWJzZHZ0bjI0cnVlcTdyMmI='),
-    'previous_keys' => [
-        ...array_filter(
-            explode(',', env('APP_PREVIOUS_KEYS', ''))
-        ),
-    ],
+
     'maintenance' => [
-        'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
-        'store' => env('APP_MAINTENANCE_STORE', 'database'),
+        'driver' => 'file',
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Autoloaded Service Providers
-    |--------------------------------------------------------------------------
-    */
-    'providers' => [
-        // Laravel Framework Service Providers...
-        Illuminate\Auth\AuthServiceProvider::class,
-        Illuminate\Broadcasting\BroadcastServiceProvider::class,
-        Illuminate\Bus\BusServiceProvider::class,
-        Illuminate\Cache\CacheServiceProvider::class,
-        Illuminate\Foundation\Providers\ConsoleSupportServiceProvider::class,
-        Illuminate\Cookie\CookieServiceProvider::class,
-        Illuminate\Database\DatabaseServiceProvider::class,
-        Illuminate\Encryption\EncryptionServiceProvider::class,
-        Illuminate\Filesystem\FilesystemServiceProvider::class,
-        Illuminate\Foundation\Providers\FoundationServiceProvider::class,
-        Illuminate\Hashing\HashServiceProvider::class,
-        Illuminate\Mail\MailServiceProvider::class,
-        Illuminate\Notifications\NotificationServiceProvider::class,
-        Illuminate\Pagination\PaginationServiceProvider::class,
-        Illuminate\Pipeline\PipelineServiceProvider::class,
-        Illuminate\Queue\QueueServiceProvider::class,
-        Illuminate\Redis\RedisServiceProvider::class,
-        Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,
-        Illuminate\Session\SessionServiceProvider::class,
-        Illuminate\Translation\TranslationServiceProvider::class,
-        Illuminate\Validation\ValidationServiceProvider::class,
-        Illuminate\View\ViewServiceProvider::class,
+    'providers' => ServiceProvider::defaultProviders()->merge([
+        /*
+         * Package Service Providers...
+         */
+        Spatie\Permission\PermissionServiceProvider::class,
 
-        // Application Service Providers...
+        /*
+         * Application Service Providers...
+         */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\MonitoringServiceProvider::class,
+        App\Providers\LinkCheckServiceProvider::class,
+    ])->toArray(),
+
+    'aliases' => Facade::defaultAliases()->merge([
+        // 'Example' => App\Facades\Example::class,
+    ])->toArray(),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Custom Application Settings
+    |--------------------------------------------------------------------------
+    */
+    'admin_email' => env('ADMIN_EMAIL', 'admin@gesvitalpro.com'),
+    'company_name' => env('COMPANY_NAME', 'GesVitalPro'),
+    'company_address' => env('COMPANY_ADDRESS', ''),
+    'company_phone' => env('COMPANY_PHONE', ''),
+    'company_email' => env('COMPANY_EMAIL', ''),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Security Settings
+    |--------------------------------------------------------------------------
+    */
+    'secure_cookies' => env('SECURE_COOKIES', true),
+    'force_https' => env('FORCE_HTTPS', false),
+    'api_rate_limit' => env('API_RATE_LIMIT', 60),
+    'api_rate_limit_window' => env('API_RATE_LIMIT_WINDOW', 1),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Feature Flags
+    |--------------------------------------------------------------------------
+    */
+    'features' => [
+        '2fa' => env('ENABLE_2FA', true),
+        'audit_logs' => env('ENABLE_AUDIT_LOGS', true),
+        'api' => env('ENABLE_API', true),
+        'notifications' => env('ENABLE_NOTIFICATIONS', true),
+        'reports' => env('ENABLE_REPORTS', true),
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Class Aliases
+    | Performance Settings
     |--------------------------------------------------------------------------
     */
-    'aliases' => [
-        'App' => Illuminate\Support\Facades\App::class,
-        'Arr' => Illuminate\Support\Arr::class,
-        'Artisan' => Illuminate\Support\Facades\Artisan::class,
-        'Auth' => Illuminate\Support\Facades\Auth::class,
-        'Blade' => Illuminate\Support\Facades\Blade::class,
-        'Broadcast' => Illuminate\Support\Facades\Broadcast::class,
-        'Bus' => Illuminate\Support\Facades\Bus::class,
-        'Cache' => Illuminate\Support\Facades\Cache::class,
-        'Config' => Illuminate\Support\Facades\Config::class,
-        'Cookie' => Illuminate\Support\Facades\Cookie::class,
-        'Crypt' => Illuminate\Support\Facades\Crypt::class,
-        'Date' => Illuminate\Support\Carbon::class,
-        'DB' => Illuminate\Support\Facades\DB::class,
-        'Eloquent' => Illuminate\Database\Eloquent\Model::class,
-        'Event' => Illuminate\Support\Facades\Event::class,
-        'File' => Illuminate\Support\Facades\File::class,
-        'Gate' => Illuminate\Support\Facades\Gate::class,
-        'Hash' => Illuminate\Support\Facades\Hash::class,
-        'Http' => Illuminate\Support\Facades\Http::class,
-        'Lang' => Illuminate\Support\Facades\Lang::class,
-        'Log' => Illuminate\Support\Facades\Log::class,
-        'Mail' => Illuminate\Support\Facades\Mail::class,
-        'Notification' => Illuminate\Support\Facades\Notification::class,
-        'Password' => Illuminate\Support\Facades\Password::class,
-        'Queue' => Illuminate\Support\Facades\Queue::class,
-        'RateLimiter' => Illuminate\Support\Facades\RateLimiter::class,
-        'Redirect' => Illuminate\Support\Facades\Redirect::class,
-        'Request' => Illuminate\Support\Facades\Request::class,
-        'Response' => Illuminate\Support\Facades\Response::class,
-        'Route' => Illuminate\Support\Facades\Route::class,
-        'Schema' => Illuminate\Support\Facades\Schema::class,
-        'Session' => Illuminate\Support\Facades\Session::class,
-        'Storage' => Illuminate\Support\Facades\Storage::class,
-        'Str' => Illuminate\Support\Str::class,
-        'URL' => Illuminate\Support\Facades\URL::class,
-        'Validator' => Illuminate\Support\Facades\Validator::class,
-        'View' => Illuminate\Support\Facades\View::class,
+    'performance' => [
+        'cache_ttl' => env('CACHE_TTL', 3600),
+        'queue_timeout' => env('QUEUE_TIMEOUT', 60),
+        'queue_retry_after' => env('QUEUE_RETRY_AFTER', 90),
+        'queue_worker_sleep' => env('QUEUE_WORKER_SLEEP', 3),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Debug Settings
+    |--------------------------------------------------------------------------
+    */
+    'debug_settings' => [
+        'debugbar_enabled' => env('DEBUGBAR_ENABLED', false),
+        'telescope_enabled' => env('TELESCOPE_ENABLED', false),
+        'query_detector_enabled' => env('QUERY_DETECTOR_ENABLED', false),
     ],
 ];

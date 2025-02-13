@@ -7,12 +7,12 @@ return [
     ],
 
     'guards' => [
-        'sanctum' => [
-            'driver' => 'sanctum',
-            'provider' => 'users',
-        ],
         'web' => [
             'driver' => 'session',
+            'provider' => 'users',
+        ],
+        'api' => [
+            'driver' => 'sanctum',
             'provider' => 'users',
         ],
     ],
@@ -21,7 +21,6 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
-            'table' => 'usuarios', // Match with Voyager's configuration
         ],
     ],
 
@@ -35,4 +34,7 @@ return [
     ],
 
     'password_timeout' => 10800,
+    'verification' => [
+        'expire' => 60,
+    ],
 ];

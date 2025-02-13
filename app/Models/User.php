@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
-
-    protected $table = 'users'; // Match with the correct table name
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -21,12 +21,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role_id',
         'avatar',
         'settings',
         'date_of_birth',
         'gender',
-        'contact_info'
+        'contact_info',
     ];
 
     /**
@@ -48,74 +47,73 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'settings' => 'array',
+        'date_of_birth' => 'date',
     ];
 
     /**
-     * Get the role that owns the user.
+     * Boot the model.
      */
-    public function role()
+    protected static function boot()
     {
-        return $this->belongsTo(Role::class, 'role_id');
-    }
+        parent::boot();
 
-    /**
-     * Check if user has a specific role
-     */
-    public function hasRole($roleName)
-    {
-        return $this->role && $this->role->name === $roleName;
-    }
+        static::created(function ($user) {
+            // Log user creation
+            SystemAlert::createAlert(
+                'info',
+                'user_created',
+                "User created: {$user->name}",
+                ['user_id' => $user->id]
+            );
+        });
 
-    /**
-     * Check if the user has any of the given roles
-     */
-    public function hasAnyRole($roles)
-    {
-        if (is_array($roles)) {
-            foreach ($roles as $role) {
-                if ($this->hasRole($role)) {
-                    return true;
-                }
+        static::updated(function ($user) {
+            // Log significant changes
+            if ($user->isDirty(['email', 'name'])) {
+                SystemAlert::createAlert(
+                    'info',
+                    'user_updated',
+                    "User updated: {$user->name}",
+                    [
+                        'user_id' => $user->id,
+                        'changes' => $user->getDirty()
+                    ]
+                );
             }
-        } else {
-            if ($this->hasRole($roles)) {
-                return true;
-            }
-        }
-        return false;
+        });
     }
 
     /**
-     * Get the login identifier for the user.
-     *
-     * @return string
+     * Get the user's full name.
      */
-    public function getAuthIdentifierName()
+    public function getFullNameAttribute(): string
     {
-        return 'email'; // Ensure we're using email for authentication
+        return $this->name;
     }
 
     /**
-     * Get the password for the user.
-     *
-     * @return string
+     * Get the user's avatar URL.
      */
-    public function getAuthPassword()
+    public function getAvatarUrlAttribute(): string
     {
-        return $this->password;
+        return $this->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode($this->name);
     }
 
     /**
-     * Validate user attributes.
-     *
-     * @return array
+     * Check if the user has completed their profile.
      */
-    public function validateUser()
+    public function hasCompleteProfile(): bool
     {
-        return [
-            'date_of_birth' => 'required|date',
-            'gender' => 'required|string|max:10',
-            'contact_info' => 'required|string|max:255',
-        ];
+        return !empty($this->date_of_birth) && 
+               !empty($this->gender) && 
+               !empty($this->contact_info);
+    }
+
+    /**
+     * Get the user's age.
+     */
+    public function getAgeAttribute(): ?int
+    {
+        return $this->date_of_birth ? $this->date_of_birth->age : null;
     }
 }
