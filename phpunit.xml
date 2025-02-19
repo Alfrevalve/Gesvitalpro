@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+>
+    <testsuites>
+        <testsuite name="Unit">
+            <directory suffix="Test.php">./tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Feature">
+            <directory suffix="Test.php">./tests/Feature</directory>
+        </testsuite>
+        <testsuite name="Performance">
+            <file>./tests/Feature/PerformanceMonitoringTest.php</file>
+            <file>./tests/Feature/CacheOptimizationTest.php</file>
+        </testsuite>
+        <testsuite name="Security">
+            <file>./tests/Feature/SecurityAndRateLimitTest.php</file>
+        </testsuite>
+        <testsuite name="Dashboard">
+            <file>./tests/Feature/DashboardTest.php</file>
+        </testsuite>
+        <testsuite name="Surgery">
+            <file>./tests/Feature/SurgeryManagementTest.php</file>
+        </testsuite>
+    </testsuites>
+    <coverage>
+        <include>
+            <directory suffix=".php">./app</directory>
+        </include>
+        <exclude>
+            <directory>./app/Console</directory>
+            <directory>./app/Exceptions</directory>
+            <directory>./app/Providers</directory>
+        </exclude>
+    </coverage>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="BCRYPT_ROUNDS" value="4"/>
+        <env name="CACHE_DRIVER" value="array"/>
+        <env name="DB_CONNECTION" value="sqlite"/>
+        <env name="DB_DATABASE" value=":memory:"/>
+        <env name="MAIL_MAILER" value="array"/>
+        <env name="QUEUE_CONNECTION" value="sync"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="TELESCOPE_ENABLED" value="false"/>
+        <env name="PERFORMANCE_MONITORING" value="true"/>
+        <env name="FILAMENT_CACHE_TTL" value="0"/>
+    </php>
+    <listeners>
+        <listener class="Tests\TestListener"/>
+    </listeners>
+</phpunit>
