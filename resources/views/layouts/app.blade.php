@@ -1,88 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
-    <title>{{ config('app.name', 'GesBio') }}</title>
-    <meta name="description" content="Sistema de Gestión Biomédica"/>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/favicon.ico') }}"/>
+        <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet"/>
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <!-- Icons. Uncomment required icon fonts -->
-    <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/boxicons.css') }}"/>
+        <!-- Scripts -->
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    </head>
+    <body class="font-sans antialiased">
+        <div class="min-h-screen bg-gray-100">
+            @include('layouts.navigation')
 
-    <!-- Core CSS -->
-    @vite(['resources/css/app.css'])
-    @if(should_load_asset('adminlte', ['dashboard', 'reports.*']))
-        <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/adminlte.min.css') }}">
-    @endif
-
-    <!-- Page CSS -->
-    @stack('styles')
-
-    <!-- Helpers -->
-    <script src="{{ asset('assets/vendor/js/helpers.js') }}"></script>
-</head>
-
-<body>
-    <!-- Layout wrapper -->
-    <div class="layout-wrapper layout-content-navbar">
-        <div class="layout-container">
-            <!-- Menu -->
-            @include('components.sidebar')
-            <!-- / Menu -->
-
-            <!-- Layout container -->
-            <div class="layout-page">
-                <!-- Navbar -->
-                @include('components.navbar')
-                <!-- / Navbar -->
-
-                <!-- Content wrapper -->
-                <div class="content-wrapper">
-                    <!-- Content -->
-                    <div class="container-xxl flex-grow-1 container-p-y">
-                        @yield('content')
+            <!-- Page Heading -->
+            @isset($header)
+                <header class="bg-white shadow">
+                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                        {{ $header }}
                     </div>
-                    <!-- / Content -->
+                </header>
+            @endisset
 
-                    <!-- Footer -->
-                    @include('components.footer')
-                    <!-- / Footer -->
-
-                    <div class="content-backdrop fade"></div>
-                </div>
-                <!-- / Content wrapper -->
-            </div>
-            <!-- / Layout container -->
+            <!-- Page Content -->
+            <main>
+                {{ $slot }}
+            </main>
         </div>
-
-        <!-- Overlay -->
-        <div class="layout-overlay layout-menu-toggle"></div>
-    </div>
-    <!-- / Layout wrapper -->
-
-    <!-- Core JS -->
-    @vite(['resources/js/app.js'])
-    @if(should_load_asset('adminlte', ['dashboard', 'reports.*']))
-        <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
-    @endif
-
-    <!-- Page JS -->
-    @stack('scripts')
-
-    <!-- Initialize AdminLTE -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize AdminLTE
-            $('[data-widget="pushmenu"]').PushMenu('toggle');
-        });
-    </script>
-</body>
+    </body>
 </html>

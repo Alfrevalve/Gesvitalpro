@@ -5,100 +5,16 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                    <a href="{{ route('dashboard') }}" class="text-xl font-semibold text-blue-600">
+                        GesBio
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        {{ __('Panel Principal') }}
                     </x-nav-link>
-                    
-                    <!-- Módulo de Equipos -->
-                    <div class="hidden sm:flex sm:items-center">
-                        <x-dropdown align="right" width="48">
-                            <x-slot name="trigger">
-                                <button class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                                    <div>{{ __('Equipos') }}</div>
-                                    <div class="ms-1">
-                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
-                                </button>
-                            </x-slot>
-
-                            <x-slot name="content">
-                                <x-dropdown-link :href="route('equipment.index')">
-                                    {{ __('Lista de Equipos') }}
-                                </x-dropdown-link>
-                                <x-dropdown-link :href="route('equipment.create')">
-                                    {{ __('Nuevo Equipo') }}
-                                </x-dropdown-link>
-                                <x-dropdown-link :href="route('equipment.maintenance')">
-                                    {{ __('Mantenimiento') }}
-                                </x-dropdown-link>
-                            </x-slot>
-                        </x-dropdown>
-                    </div>
-
-                    <!-- Módulo de Gestión de Visitas -->
-                    <div class="hidden sm:flex sm:items-center">
-                        <x-dropdown align="right" width="48">
-                            <x-slot name="trigger">
-                                <button class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                                    <div>{{ __('Gestión de Visitas') }}</div>
-                                    <div class="ms-1">
-                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
-                                </button>
-                            </x-slot>
-
-                            <x-slot name="content">
-                                <x-dropdown-link :href="route('visitas.index')">
-                                    {{ __('Registro de Visitas') }}
-                                </x-dropdown-link>
-                                <x-dropdown-link :href="route('instituciones.index')">
-                                    {{ __('Instituciones') }}
-                                </x-dropdown-link>
-                                <x-dropdown-link :href="route('medicos.index')">
-                                    {{ __('Médicos') }}
-                                </x-dropdown-link>
-                            </x-slot>
-                        </x-dropdown>
-                    </div>
-
-                    <!-- Módulo de Reportes -->
-                    <div class="hidden sm:flex sm:items-center">
-                        <x-dropdown align="right" width="48">
-                            <x-slot name="trigger">
-                                <button class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                                    <div>{{ __('Reportes') }}</div>
-                                    <div class="ms-1">
-                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
-                                </button>
-                            </x-slot>
-
-                            <x-slot name="content">
-                                <x-dropdown-link :href="route('visitas.reporte-frecuencia')">
-                                    {{ __('Frecuencia de Visitas') }}
-                                </x-dropdown-link>
-                                <x-dropdown-link :href="route('instituciones.reporte-cobertura')">
-                                    {{ __('Cobertura de Instituciones') }}
-                                </x-dropdown-link>
-                                <x-dropdown-link :href="route('medicos.reporte-cobertura')">
-                                    {{ __('Cobertura de Médicos') }}
-                                </x-dropdown-link>
-                            </x-slot>
-                        </x-dropdown>
-                    </div>
                 </div>
             </div>
 
@@ -119,7 +35,7 @@
 
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
+                            {{ __('Perfil') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
@@ -129,7 +45,7 @@
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                {{ __('Cerrar Sesión') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -152,62 +68,8 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+                {{ __('Panel Principal') }}
             </x-responsive-nav-link>
-
-            <!-- Equipos (Responsive) -->
-            <div class="pt-4 pb-1 border-t border-gray-200">
-                <div class="px-4">
-                    <div class="font-medium text-base text-gray-800">{{ __('Equipos') }}</div>
-                </div>
-                <div class="mt-3 space-y-1">
-                    <x-responsive-nav-link :href="route('equipment.index')">
-                        {{ __('Lista de Equipos') }}
-                    </x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('equipment.create')">
-                        {{ __('Nuevo Equipo') }}
-                    </x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('equipment.maintenance')">
-                        {{ __('Mantenimiento') }}
-                    </x-responsive-nav-link>
-                </div>
-            </div>
-
-            <!-- Gestión de Visitas (Responsive) -->
-            <div class="pt-4 pb-1 border-t border-gray-200">
-                <div class="px-4">
-                    <div class="font-medium text-base text-gray-800">{{ __('Gestión de Visitas') }}</div>
-                </div>
-                <div class="mt-3 space-y-1">
-                    <x-responsive-nav-link :href="route('visitas.index')">
-                        {{ __('Registro de Visitas') }}
-                    </x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('instituciones.index')">
-                        {{ __('Instituciones') }}
-                    </x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('medicos.index')">
-                        {{ __('Médicos') }}
-                    </x-responsive-nav-link>
-                </div>
-            </div>
-
-            <!-- Reportes (Responsive) -->
-            <div class="pt-4 pb-1 border-t border-gray-200">
-                <div class="px-4">
-                    <div class="font-medium text-base text-gray-800">{{ __('Reportes') }}</div>
-                </div>
-                <div class="mt-3 space-y-1">
-                    <x-responsive-nav-link :href="route('visitas.reporte-frecuencia')">
-                        {{ __('Frecuencia de Visitas') }}
-                    </x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('instituciones.reporte-cobertura')">
-                        {{ __('Cobertura de Instituciones') }}
-                    </x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('medicos.reporte-cobertura')">
-                        {{ __('Cobertura de Médicos') }}
-                    </x-responsive-nav-link>
-                </div>
-            </div>
         </div>
 
         <!-- Responsive Settings Options -->
@@ -219,7 +81,7 @@
 
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
+                    {{ __('Perfil') }}
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->
@@ -229,7 +91,7 @@
                     <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                        {{ __('Cerrar Sesión') }}
                     </x-responsive-nav-link>
                 </form>
             </div>

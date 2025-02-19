@@ -67,8 +67,8 @@
                     x-ref="backgroundColorElement"
                     @class([
                         match ($color) {
-                            'gray' => 'text-gray-100 dark:text-gray-800',
-                            default => 'text-custom-50 dark:text-custom-400/10',
+                            'gray' => 'text-gray-100',
+                            default => 'text-custom-50',
                         },
                     ])
                     @style([
@@ -85,7 +85,7 @@
                     @class([
                         match ($color) {
                             'gray' => 'text-gray-400',
-                            default => 'text-custom-500 dark:text-custom-400',
+                            default => 'text-custom-500',
                         },
                     ])
                     @style([
@@ -99,12 +99,12 @@
 
                 <span
                     x-ref="gridColorElement"
-                    class="text-gray-200 dark:text-gray-800"
+                    class="text-gray-200"
                 ></span>
 
                 <span
                     x-ref="textColorElement"
-                    class="text-gray-500 dark:text-gray-400"
+                    class="text-gray-500"
                 ></span>
             </div>
         </div>

@@ -42,12 +42,12 @@
             @if ($icon)
                 <x-filament::icon
                     :icon="$icon"
-                    class="fi-sidebar-group-icon h-6 w-6 text-gray-400 dark:text-gray-500"
+                    class="fi-sidebar-group-icon h-6 w-6 text-gray-400"
                 />
             @endif
 
             <span
-                class="fi-sidebar-group-label flex-1 text-sm font-medium leading-6 text-gray-500 dark:text-gray-400"
+                class="fi-sidebar-group-label flex-1 text-sm font-medium leading-6 text-gray-500"
             >
                 {{ $label }}
             </span>
@@ -86,14 +86,14 @@
                               }
                     "
                     x-tooltip.html="tooltip"
-                    class="relative flex flex-1 items-center justify-center gap-x-3 rounded-lg px-2 py-2 outline-none transition duration-75 hover:bg-gray-100 focus-visible:bg-gray-100 dark:hover:bg-white/5 dark:focus-visible:bg-white/5"
+                    class="relative flex flex-1 items-center justify-center gap-x-3 rounded-lg px-2 py-2 outline-none transition duration-75 hover:bg-gray-100 focus-visible:bg-gray-100"
                 >
                     <x-filament::icon
                         :icon="$icon"
                         @class([
                             'h-6 w-6',
-                            'text-gray-400 dark:text-gray-500' => ! $active,
-                            'text-primary-600 dark:text-primary-400' => $active,
+                            'text-gray-400' => ! $active,
+                            'text-primary-600' => $active,
                         ])
                     />
                 </button>

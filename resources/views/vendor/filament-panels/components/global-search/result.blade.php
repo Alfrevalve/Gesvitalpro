@@ -6,7 +6,7 @@
 ])
 
 <li
-    {{ $attributes->class(['fi-global-search-result scroll-mt-9 transition duration-75 focus-within:bg-gray-50 hover:bg-gray-50 dark:focus-within:bg-white/5 dark:hover:bg-white/5']) }}
+    {{ $attributes->class(['fi-global-search-result scroll-mt-9 transition duration-75 focus-within:bg-gray-50 hover:bg-gray-50']) }}
 >
     <a
         {{ \Filament\Support\generate_href_html($url) }}
@@ -17,14 +17,14 @@
             'p-4' => ! $actions,
         ])
     >
-        <h4 class="text-sm font-medium text-gray-950 dark:text-white">
+        <h4 class="text-sm font-medium text-gray-950">
             {{ $title }}
         </h4>
 
         @if ($details)
             <dl class="mt-1">
                 @foreach ($details as $label => $value)
-                    <div class="text-sm text-gray-500 dark:text-gray-400">
+                    <div class="text-sm text-gray-500">
                         @if ($isAssoc ??= \Illuminate\Support\Arr::isAssoc($details))
                             <dt class="inline font-medium">{{ $label }}:</dt>
                         @endif

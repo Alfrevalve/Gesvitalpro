@@ -28,8 +28,8 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role' => ['required', 'in:line_manager,instrumentist'],
-            'line_id' => ['required_if:role,line_manager,instrumentist', 'exists:lines,id'],
+            'role' => ['required', 'in:admin,gerente,supervisor,vendedor,tecnico'],
+            'line_id' => ['required_if:role,supervisor,tecnico,vendedor', 'exists:lines,id'],
         ]);
     }
 
@@ -39,9 +39,8 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'role' => $data['role'],
             'line_id' => $data['line_id'],
-        ]);
+        ])->assignRole($data['role']);
     }
 
     public function showRegistrationForm()

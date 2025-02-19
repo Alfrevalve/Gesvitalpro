@@ -14,6 +14,12 @@ class Medico extends Model
     use HasFactory, SoftDeletes;
 
     /**
+     * Estados del médico
+     */
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_INACTIVE = 'inactive';
+
+    /**
      * The attributes that should be cast.
      *
      * @var array
@@ -62,9 +68,66 @@ class Medico extends Model
     ];
 
     /**
+     * Obtiene el color del badge según el estado
+     */
+    public function getStatusBadgeAttribute(): string
+    {
+        return match($this->estado) {
+            self::STATUS_ACTIVE => 'success',
+            self::STATUS_INACTIVE => 'danger',
+            default => 'secondary',
+        };
+    }
+
+    /**
+     * Obtiene el texto del estado
+     */
+    public function getStatusTextAttribute(): string
+    {
+        return match($this->estado) {
+            self::STATUS_ACTIVE => 'Activo',
+            self::STATUS_INACTIVE => 'Inactivo',
+            default => 'Desconocido',
+        };
+    }
+
+    /**
+     * Verifica si el médico está activo
+     */
+    public function isActive(): bool
+    {
+        return $this->estado === self::STATUS_ACTIVE;
+    }
+
+    /**
+     * Activa el médico
+     */
+    public function activate(): bool
+    {
+        $this->estado = self::STATUS_ACTIVE;
+        return $this->save();
+    }
+
+    /**
+     * Desactiva el médico
+     */
+    public function deactivate(): bool
+    {
+        $this->estado = self::STATUS_INACTIVE;
+        return $this->save();
+    }
+
+    /**
+     * Toggle el estado del médico
+     */
+    public function toggleStatus(): bool
+    {
+        $this->estado = $this->isActive() ? self::STATUS_INACTIVE : self::STATUS_ACTIVE;
+        return $this->save();
+    }
+
+    /**
      * Get all visits associated with the doctor.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function visitas(): HasMany
     {
@@ -73,8 +136,6 @@ class Medico extends Model
 
     /**
      * Get all surgeries associated with the doctor.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function surgeries(): HasMany
     {
@@ -83,8 +144,6 @@ class Medico extends Model
 
     /**
      * Get the institution associated with the doctor.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function institucion(): BelongsTo
     {
@@ -93,20 +152,14 @@ class Medico extends Model
 
     /**
      * Scope a query to only include active doctors.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeActive($query)
     {
-        return $query->where('estado', 'active');
+        return $query->where('estado', self::STATUS_ACTIVE);
     }
 
     /**
      * Scope a query to only include doctors with pending surgeries.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeWithPendingSurgeries($query)
     {
@@ -116,9 +169,15 @@ class Medico extends Model
     }
 
     /**
+     * Scope para médicos por especialidad
+     */
+    public function scopeByEspecialidad($query, string $especialidad)
+    {
+        return $query->where('especialidad', $especialidad);
+    }
+
+    /**
      * Get the total number of surgeries performed by the doctor.
-     *
-     * @return int
      */
     public function getTotalSurgeries(): int
     {
@@ -127,8 +186,6 @@ class Medico extends Model
 
     /**
      * Get the number of surgeries performed this month.
-     *
-     * @return int
      */
     public function getSurgeriesThisMonth(): int
     {
@@ -140,8 +197,6 @@ class Medico extends Model
 
     /**
      * Get surgeries grouped by institution with eager loading optimization.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getInstitutionSurgeries()
     {
@@ -156,8 +211,6 @@ class Medico extends Model
 
     /**
      * Get the success rate of surgeries.
-     *
-     * @return float
      */
     public function getSurgerySuccessRate(): float
     {
@@ -173,9 +226,6 @@ class Medico extends Model
 
     /**
      * Get upcoming surgeries for the doctor.
-     *
-     * @param int $days Number of days to look ahead
-     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getUpcomingSurgeries(int $days = 7)
     {
@@ -189,14 +239,46 @@ class Medico extends Model
 
     /**
      * Check if the doctor is available on a specific date.
-     *
-     * @param \Carbon\Carbon $date
-     * @return bool
      */
     public function isAvailableOn(Carbon $date): bool
     {
         return !$this->surgeries()
             ->whereDate('fecha', $date)
+            ->exists();
+    }
+
+    /**
+     * Obtiene las especialidades únicas
+     */
+    public static function getUniqueSpecialties(): array
+    {
+        return self::distinct('especialidad')
+            ->pluck('especialidad')
+            ->filter()
+            ->toArray();
+    }
+
+    /**
+     * Obtiene estadísticas del médico
+     */
+    public function getStats(): array
+    {
+        return [
+            'total_surgeries' => $this->getTotalSurgeries(),
+            'surgeries_this_month' => $this->getSurgeriesThisMonth(),
+            'success_rate' => $this->getSurgerySuccessRate(),
+            'visitas_count' => $this->visitas()->count(),
+            'pending_surgeries' => $this->surgeries()->where('status', 'pending')->count(),
+        ];
+    }
+
+    /**
+     * Verifica si el médico tiene cirugías programadas
+     */
+    public function hasScheduledSurgeries(): bool
+    {
+        return $this->surgeries()
+            ->where('fecha', '>=', now())
             ->exists();
     }
 }

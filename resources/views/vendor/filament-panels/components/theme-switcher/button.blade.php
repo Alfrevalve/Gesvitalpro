@@ -15,11 +15,11 @@
         content: @js($label),
         theme: $store.theme,
     }"
-    class="fi-theme-switcher-btn flex justify-center rounded-md p-2 outline-none transition duration-75 hover:bg-gray-50 focus-visible:bg-gray-50 dark:hover:bg-white/5 dark:focus-visible:bg-white/5"
+    class="fi-theme-switcher-btn flex justify-center rounded-md p-2 outline-none transition duration-75 hover:bg-gray-50 focus-visible:bg-gray-50"
     x-bind:class="
         theme === @js($theme)
-            ? 'fi-active bg-gray-50 text-primary-500 dark:bg-white/5 dark:text-primary-400'
-            : 'text-gray-400 hover:text-gray-500 focus-visible:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 dark:focus-visible:text-gray-400'
+            ? 'fi-active bg-gray-50 text-primary-500'
+            : 'text-gray-400 hover:text-gray-500 focus-visible:text-gray-500'
     "
 >
     <x-filament::icon

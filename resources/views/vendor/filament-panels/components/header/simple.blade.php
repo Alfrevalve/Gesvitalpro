@@ -11,7 +11,7 @@
 
     @if (filled($heading))
         <h1
-            class="fi-simple-header-heading text-center text-2xl font-bold tracking-tight text-gray-950 dark:text-white"
+            class="fi-simple-header-heading text-center text-2xl font-bold tracking-tight text-gray-950"
         >
             {{ $heading }}
         </h1>
@@ -19,7 +19,7 @@
 
     @if (filled($subheading))
         <p
-            class="fi-simple-header-subheading mt-2 text-center text-sm text-gray-500 dark:text-gray-400"
+            class="fi-simple-header-subheading mt-2 text-center text-sm text-gray-500"
         >
             {{ $subheading }}
         </p>

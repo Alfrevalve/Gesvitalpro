@@ -8,6 +8,8 @@ use App\Services\CacheOptimizationService;
 use App\Services\SecurityMonitor;
 use App\Services\PerformanceMonitor;
 use Illuminate\Support\Facades\Log;
+use Spatie\Permission\Contracts\Role as RoleContract;
+use App\Models\Role;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +22,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(CacheOptimizationService::class);
         $this->app->singleton(SecurityMonitor::class);
         $this->app->singleton(PerformanceMonitor::class);
+
+        // Bind Role model
+        $this->app->bind(RoleContract::class, Role::class);
+        $this->app->bind('role', Role::class);
     }
 
     /**

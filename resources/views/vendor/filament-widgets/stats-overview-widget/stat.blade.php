@@ -13,7 +13,7 @@
     $descriptionIconClasses = \Illuminate\Support\Arr::toCssClasses([
         'fi-wi-stats-overview-stat-description-icon h-5 w-5',
         match ($descriptionColor) {
-            'gray' => 'text-gray-400 dark:text-gray-500',
+            'gray' => 'text-gray-400',
             default => 'text-custom-500',
         },
     ]);
@@ -34,7 +34,7 @@
     {{
         $getExtraAttributeBag()
             ->class([
-                'fi-wi-stats-overview-stat relative rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10',
+                'fi-wi-stats-overview-stat relative rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-950/5',
             ])
     }}
 >
@@ -43,19 +43,19 @@
             @if ($icon = $getIcon())
                 <x-filament::icon
                     :icon="$icon"
-                    class="fi-wi-stats-overview-stat-icon h-5 w-5 text-gray-400 dark:text-gray-500"
+                    class="fi-wi-stats-overview-stat-icon h-5 w-5 text-gray-400"
                 />
             @endif
 
             <span
-                class="fi-wi-stats-overview-stat-label text-sm font-medium text-gray-500 dark:text-gray-400"
+                class="fi-wi-stats-overview-stat-label text-sm font-medium text-gray-500"
             >
                 {{ $getLabel() }}
             </span>
         </div>
 
         <div
-            class="fi-wi-stats-overview-stat-value text-3xl font-semibold tracking-tight text-gray-950 dark:text-white"
+            class="fi-wi-stats-overview-stat-value text-3xl font-semibold tracking-tight text-gray-950"
         >
             {{ $getValue() }}
         </div>
@@ -74,8 +74,8 @@
                     @class([
                         'fi-wi-stats-overview-stat-description text-sm',
                         match ($descriptionColor) {
-                            'gray' => 'text-gray-500 dark:text-gray-400',
-                            default => 'fi-color-custom text-custom-600 dark:text-custom-400',
+                            'gray' => 'text-gray-500',
+                            default => 'fi-color-custom text-custom-600',
                         },
                         is_string($descriptionColor) ? "fi-color-{$descriptionColor}" : null,
                     ])
@@ -138,8 +138,8 @@
                     x-ref="backgroundColorElement"
                     @class([
                         match ($chartColor) {
-                            'gray' => 'text-gray-100 dark:text-gray-800',
-                            default => 'text-custom-50 dark:text-custom-400/10',
+                            'gray' => 'text-gray-100',
+                            default => 'text-custom-50',
                         },
                     ])
                 ></span>
@@ -149,7 +149,7 @@
                     @class([
                         match ($chartColor) {
                             'gray' => 'text-gray-400',
-                            default => 'text-custom-500 dark:text-custom-400',
+                            default => 'text-custom-500',
                         },
                     ])
                 ></span>
