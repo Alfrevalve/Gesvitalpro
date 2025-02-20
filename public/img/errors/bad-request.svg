@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+    <style>
+        @media (prefers-color-scheme: dark) {
+            #background { fill: #343a40; }
+            .text { fill: #ffffff; }
+        }
+        @media (prefers-color-scheme: light) {
+            #background { fill: #f8f9fa; }
+            .text { fill: #212529; }
+        }
+        .accent { fill: #dc3545; }
+        .icon { font-family: 'Font Awesome 5 Free'; font-weight: 900; }
+    </style>
+
+    <!-- Fondo -->
+    <rect id="background" width="400" height="300" rx="10"/>
+
+    <!-- Círculo central -->
+    <circle class="accent" cx="200" cy="120" r="60" opacity="0.1"/>
+
+    <!-- Icono -->
+    <text class="accent icon" x="200" y="140" text-anchor="middle" font-size="48">
+        &#xf06a;
+    </text>
+
+    <!-- Código de error -->
+    <text class="text" x="200" y="220" text-anchor="middle" font-size="36" font-weight="bold">
+        400
+    </text>
+
+    <!-- Elementos decorativos -->
+    <g class="accent" opacity="0.1">
+        <circle cx="50" cy="50" r="20"/>
+        <circle cx="350" cy="250" r="15"/>
+        <circle cx="30" cy="250" r="10"/>
+        <circle cx="350" cy="50" r="25"/>
+    </g>
+</svg>

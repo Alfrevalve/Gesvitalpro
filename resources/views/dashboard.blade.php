@@ -1,87 +1,74 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Panel Principal') }}
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <!-- Welcome Message -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6">
-                    <h3 class="text-lg font-medium text-gray-900 mb-2">
-                        {{ __('Bienvenido a GesBio') }}
-                    </h3>
-                    <p class="text-gray-600">
-                        {{ __('Sistema de Gestión Biomédica para el control y seguimiento de equipos médicos.') }}
-                    </p>
-                </div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Quirúrgico</title>
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard Quirúrgico</h1>
+        <h2>Métricas Clave</h2>
+        <div class="metrics">
+            <div class="metric">
+                <h3>Cirugías Realizadas por Línea</h3>
+                <ul>
+                    @foreach ($metrics['surgeries_by_line'] as $line => $count)
+                        <li>{{ $line }}: {{ $count }}</li>
+                    @endforeach
+                </ul>
             </div>
-
-            <!-- Quick Stats -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Líneas -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <div class="text-sm font-medium text-gray-500 mb-1">Líneas</div>
-                        <div class="text-2xl font-semibold text-blue-600">4</div>
-                    </div>
-                </div>
-
-                <!-- Equipos -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <div class="text-sm font-medium text-gray-500 mb-1">Equipos</div>
-                        <div class="text-2xl font-semibold text-blue-600">{{ App\Models\Equipment::count() }}</div>
-                    </div>
-                </div>
-
-                <!-- Cirugías -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <div class="text-sm font-medium text-gray-500 mb-1">Cirugías</div>
-                        <div class="text-2xl font-semibold text-blue-600">{{ App\Models\Surgery::count() }}</div>
-                    </div>
-                </div>
-
-                <!-- Instituciones -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <div class="text-sm font-medium text-gray-500 mb-1">Instituciones</div>
-                        <div class="text-2xl font-semibold text-blue-600">{{ App\Models\Institucion::count() }}</div>
-                    </div>
-                </div>
+            <div class="metric">
+                <h3>Cirugías Realizadas por Instrumentista</h3>
+                <ul>
+                    @foreach ($metrics['surgeries_by_instrumentist'] as $instrumentist => $count)
+                        <li>{{ $instrumentist }}: {{ $count }}</li>
+                    @endforeach
+                </ul>
             </div>
-
-            <!-- Quick Actions -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">
-                        {{ __('Acciones Rápidas') }}
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <a href="#" class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                            <svg class="w-6 h-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                            </svg>
-                            <span class="text-gray-700">Ver Equipos</span>
-                        </a>
-                        <a href="#" class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                            <svg class="w-6 h-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                            </svg>
-                            <span class="text-gray-700">Programar Cirugía</span>
-                        </a>
-                        <a href="#" class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                            <svg class="w-6 h-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                            <span class="text-gray-700">Generar Reporte</span>
-                        </a>
-                    </div>
-                </div>
+            <div class="metric">
+                <h3>Cirugías Mensuales</h3>
+                <ul>
+                    @foreach ($metrics['monthly_surgeries'] as $month => $count)
+                        <li>{{ $month }}: {{ $count }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            <div class="metric">
+                <h3>Cirugías Reprogramadas</h3>
+                <p>{{ $metrics['rescheduled_surgeries'] }}</p>
+            </div>
+            <div class="metric">
+                <h3>Cirugías Completadas</h3>
+                <p>{{ $metrics['completed_surgeries'] }}</p>
+            </div>
+            <div class="metric">
+                <h3>Cirugías Suspendidas</h3>
+                <p>{{ $metrics['cancelled_surgeries'] }}</p>
+            </div>
+            <div class="metric">
+                <h3>Frecuencia de Visitas</h3>
+                <ul>
+                    @foreach ($metrics['visit_frequency'] as $medico => $count)
+                        <li>{{ $medico }}: {{ $count }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            <div class="metric">
+                <h3>Cobertura de Instituciones</h3>
+                <ul>
+                    @foreach ($metrics['institution_coverage'] as $institucion)
+                        <li>{{ $institucion['nombre'] }}: {{ $institucion['visitas'] }} ({{ $institucion['cobertura'] }})</li>
+                    @endforeach
+                </ul>
             </div>
         </div>
+        <div class="actions">
+            <h2>Generar Reportes</h2>
+            <a href="{{ route('report.pdf') }}" class="btn">Generar Reporte PDF</a>
+            <a href="{{ route('report.excel') }}" class="btn">Generar Reporte Excel</a>
+        </div>
     </div>
-</x-app-layout>
+</body>
+</html>

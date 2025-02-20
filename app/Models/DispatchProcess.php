@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Facades\Storage;
 
 class DispatchProcess extends Model
 {
@@ -27,12 +26,6 @@ class DispatchProcess extends Model
     public const PRIORITY_LOW = 'low';
     public const PRIORITY_MEDIUM = 'medium';
     public const PRIORITY_HIGH = 'high';
-
-    /**
-     * Tipos de entrega
-     */
-    public const DELIVERY_TYPE_PICKUP = 'pickup';
-    public const DELIVERY_TYPE_DELIVERY = 'delivery';
 
     protected $fillable = [
         'surgery_request_id',
@@ -122,11 +115,6 @@ class DispatchProcess extends Model
         return $this->priority === self::PRIORITY_HIGH;
     }
 
-    public function isPickup(): bool
-    {
-        return $this->delivery_type === self::DELIVERY_TYPE_PICKUP;
-    }
-
     /**
      * Métodos de proceso
      */
@@ -202,7 +190,7 @@ class DispatchProcess extends Model
 
     public function getDeliveryPhotoUrlAttribute(): ?string
     {
-        return $this->delivery_photo ? Storage::url($this->delivery_photo) : null;
+        return $this->delivery_photo ? asset('storage/' . $this->delivery_photo) : null;
     }
 
     /**
@@ -253,19 +241,12 @@ class DispatchProcess extends Model
             'in_progress' => $processes->where('status', self::STATUS_IN_PROGRESS)->count(),
             'cancelled' => $processes->where('status', self::STATUS_CANCELLED)->count(),
             'avg_delivery_time' => $processes->whereNotNull('delivery_time')->avg('delivery_time'),
+            'quality_check_passed' => $processes->where('quality_check_passed', true)->count(),
+            'quality_check_failed' => $processes->where('quality_check_passed', false)->count(),
             'by_priority' => [
                 'high' => $processes->where('priority', self::PRIORITY_HIGH)->count(),
                 'medium' => $processes->where('priority', self::PRIORITY_MEDIUM)->count(),
                 'low' => $processes->where('priority', self::PRIORITY_LOW)->count(),
-            ],
-            'by_delivery_type' => [
-                'pickup' => $processes->where('delivery_type', self::DELIVERY_TYPE_PICKUP)->count(),
-                'delivery' => $processes->where('delivery_type', self::DELIVERY_TYPE_DELIVERY)->count(),
-            ],
-            'package_conditions' => [
-                'excellent' => $processes->where('package_condition', 'excellent')->count(),
-                'good' => $processes->where('package_condition', 'good')->count(),
-                'damaged' => $processes->where('package_condition', 'damaged')->count(),
             ],
         ];
     }

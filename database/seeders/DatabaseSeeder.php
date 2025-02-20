@@ -21,15 +21,8 @@ class DatabaseSeeder extends Seeder
             );
         }
 
-        // Create admin user if it doesn't exist
-        if (!User::where('email', 'admin@gesbio.com')->exists()) {
-            User::create([
-                'name' => 'Administrador',
-                'email' => 'admin@gesbio.com',
-                'password' => Hash::make('admin123'),
-                'email_verified_at' => now(),
-            ])->assignRole('admin');
-        }
+        // Call BasicUsersSeeder to create users with roles
+        $this->call(BasicUsersSeeder::class);
 
         // Create basic lines
         $lines = [

@@ -1,0 +1,52 @@
+:root {
+    --navy-blue: #0F3061;
+    --bright-blue: #0097CD;
+    --turquoise: #65D7CA;
+    --light-turquoise: #AAE9E2;
+}
+
+.auth-card {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px rgba(15, 48, 97, 0.1);
+    padding: 2rem;
+}
+
+.auth-gradient {
+    background: linear-gradient(135deg, var(--navy-blue), var(--bright-blue));
+}
+
+.btn-primary {
+    background-color: var(--bright-blue);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--navy-blue);
+}
+
+.input-field {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.input-field:focus {
+    border-color: var(--turquoise);
+    box-shadow: 0 0 0 2px rgba(101, 215, 202, 0.2);
+}
+
+.social-login {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.social-login:hover {
+    background-color: var(--light-turquoise);
+    border-color: var(--turquoise);
+}

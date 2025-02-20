@@ -1,20 +1,21 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+// Rutas de prueba para páginas de error
+Route::get('/test-errors/{code}', function ($code) {
+    abort($code);
+})->where('code', '400|401|403|404|500|503');
+
+// Rutas de administración
+Route::prefix('admin')->name('admin.')->middleware(['web', 'auth'])->group(function () {
+    // Gestión de usuarios
+    Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+    Route::patch('users/{user}/toggle-status', [\App\Http\Controllers\Admin\UserController::class, 'toggleStatus'])
+        ->name('users.toggle-status');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+// Ruta para probar la optimización de respuesta
+Route::get('/test-optimization', function () {
+    return view('test-optimization');
 });
-
-require __DIR__.'/auth.php';

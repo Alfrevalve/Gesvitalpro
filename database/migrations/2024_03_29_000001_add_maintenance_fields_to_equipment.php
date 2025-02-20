@@ -10,17 +10,13 @@ return new class extends Migration
     {
         Schema::table('equipment', function (Blueprint $table) {
             $table->string('type')->after('name')->nullable();
-            $table->timestamp('last_maintenance')->after('status')->nullable();
-            $table->timestamp('next_maintenance')->after('last_maintenance')->nullable();
-            $table->unique('serial_number');
         });
     }
 
     public function down(): void
     {
         Schema::table('equipment', function (Blueprint $table) {
-            $table->dropColumn(['type', 'last_maintenance', 'next_maintenance']);
-            $table->dropUnique(['serial_number']);
+            $table->dropColumn('type');
         });
     }
 };

@@ -12,6 +12,21 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        // Mantenimiento del caché
+        $schedule->command('cache:maintenance cleanup')->hourly()
+            ->description('Limpieza programada del caché')
+            ->onOneServer();
+
+        $schedule->command('cache:maintenance preload')->dailyAt('03:00')
+            ->description('Precarga de datos frecuentes')
+            ->onOneServer();
+
+        // Monitoreo de rendimiento
+        $schedule->command('cache:maintenance stats')
+            ->everyFifteenMinutes()
+            ->description('Registro de estadísticas de caché')
+            ->onOneServer();
+
         // Verificar equipos que necesitan mantenimiento (diariamente a las 7:00 AM)
         $schedule->command('equipment:check-maintenance')
                 ->dailyAt('07:00')
@@ -99,12 +114,14 @@ class Kernel extends ConsoleKernel
      *
      * @var array
      */
-    protected $commands = [
+protected $commands = [
+    Commands\OptimizeQueriesCommand::class,
         Commands\InitializeSystem::class,
         Commands\CheckEquipmentMaintenance::class,
         Commands\NotifyUpcomingSurgeries::class,
         Commands\SystemMaintenance::class,
         Commands\ActualizarUbicacionesInstituciones::class,
         Commands\OptimizeSystemCommand::class,
+        Commands\GenerateErrorIllustrations::class,
     ];
 }
