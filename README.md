@@ -1,107 +1,238 @@
-# Sistema de Gestión Quirúrgica - GesBio
+# GesBio - Sistema de Gestión Quirúrgica
 
-<p align="center">
-<img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo">
-</p>
+## 📋 Introducción
 
-## Descripción del Proyecto
+GesBio es un sistema de gestión quirúrgica desarrollado con Laravel que optimiza y automatiza los procesos relacionados con la gestión de cirugías, equipamiento médico y personal sanitario. El sistema permite:
 
-GesBio es un sistema de gestión integral para clínicas y hospitales, desarrollado con Laravel y AdminLTE. El sistema permite:
+- Gestión integral de cirugías y procedimientos médicos
+- Control y seguimiento de equipamiento médico
+- Administración de personal y roles
+- Generación de reportes y métricas
+- Sistema de notificaciones en tiempo real
+- Optimización de procesos quirúrgicos
 
-- Gestión de cirugías y procedimientos
-- Control de inventario de materiales quirúrgicos
-- Seguimiento de equipos médicos
-- Registro de actividades y auditorías
-- Gestión de usuarios y permisos
+## 🛠️ Tecnologías Utilizadas
 
-## Características Principales
+- **PHP 8.1+**
+- **Laravel 10.x** - Framework principal
+- **MySQL 8.0+** - Base de datos
+- **TailwindCSS** - Framework CSS
+- **Alpine.js** - Framework JavaScript
+- **Laravel Breeze** - Autenticación
+- **Laravel Sanctum** - API Authentication
+- **AdminLTE** - Panel de administración
 
-✅ Gestión completa del ciclo quirúrgico  
-✅ Sistema de notificaciones en tiempo real  
-✅ Integración con sistemas de geolocalización  
-✅ Monitoreo de rendimiento y seguridad  
-✅ Optimización de procesos mediante IA  
+## 📋 Requisitos Previos
 
-## Requisitos del Sistema
+- PHP >= 8.1
+- Composer
+- Node.js >= 16.x
+- MySQL >= 8.0
+- Extensiones PHP requeridas:
+  - BCMath
+  - Ctype
+  - JSON
+  - Mbstring
+  - OpenSSL
+  - PDO
+  - Tokenizer
+  - XML
 
-- PHP 8.1 o superior
-- Composer 2.0 o superior
-- MySQL 5.7+ o MariaDB 10.3+
-- Node.js 16.x o superior
-- Redis (opcional para cache y colas)
-
-## Instalación
+## 🚀 Instalación
 
 1. Clonar el repositorio:
 ```bash
-git clone https://github.com/tu-usuario/gesbio.git
+git clone https://github.com/Alfrevalve/Gesvitalpro.git
+cd gesbio
 ```
 
-2. Instalar dependencias:
+2. Instalar dependencias PHP:
 ```bash
 composer install
+```
+
+3. Instalar dependencias JavaScript:
+```bash
 npm install
 ```
 
-3. Configurar entorno:
+4. Configurar el entorno:
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
-4. Ejecutar migraciones:
+5. Configurar la base de datos en el archivo .env:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=gesbio
+DB_USERNAME=tu_usuario
+DB_PASSWORD=tu_contraseña
+```
+
+6. Ejecutar migraciones y seeders:
 ```bash
 php artisan migrate --seed
 ```
 
-5. Compilar assets:
+7. Generar assets:
 ```bash
 npm run build
 ```
 
-6. Iniciar servidor:
+## 💻 Uso
+
+1. Iniciar el servidor de desarrollo:
 ```bash
 php artisan serve
 ```
 
-## Configuración Importante
+2. Compilar assets en tiempo real:
+```bash
+npm run dev
+```
 
-- Configurar credenciales de base de datos en `.env`
-- Definir variables de entorno para notificaciones
-- Configurar Redis para cache y colas (opcional)
+3. Acceder al sistema:
+- URL: `http://localhost:8000`
+- Credenciales por defecto:
+  - Email: admin@gesbio.com
+  - Password: password
 
-## Desarrollo
+## 📁 Estructura del Proyecto
 
-El proyecto sigue las mejores prácticas de Laravel y utiliza:
+```
+gesbio/
+├── app/
+│   ├── Console/Commands/    # Comandos personalizados
+│   ├── Http/Controllers/    # Controladores
+│   ├── Models/             # Modelos Eloquent
+│   ├── Services/           # Servicios de la aplicación
+│   └── Providers/          # Service Providers
+├── config/                 # Archivos de configuración
+├── database/
+│   ├── migrations/         # Migraciones
+│   └── seeders/           # Seeders
+├── resources/
+│   ├── css/               # Estilos
+│   ├── js/                # JavaScript
+│   └── views/             # Vistas Blade
+└── routes/                # Definición de rutas
+```
 
-- **AdminLTE** como framework de UI
-- **Laravel Sanctum** para autenticación API
-- **Laravel Telescope** para depuración
-- **Laravel Horizon** para gestión de colas
+## ⚡ Comandos Útiles de Artisan
 
-## Estado Actual
+```bash
+# Limpiar caché
+php artisan cache:clear
+php artisan config:clear
+php artisan view:clear
 
-✅ Auditoría de código completada  
-✅ Optimización de rendimiento implementada  
-✅ Sistema de notificaciones activo  
-✅ Pruebas unitarias en desarrollo  
+# Mantenimiento
+php artisan down    # Modo mantenimiento
+php artisan up      # Desactivar modo mantenimiento
 
-## Contribuciones
+# Base de datos
+php artisan migrate:fresh --seed    # Recrear base de datos
+php artisan db:seed                 # Ejecutar seeders
 
-Las contribuciones son bienvenidas. Por favor sigue las [guías de contribución](CONTRIBUTING.md) del proyecto.
+# Crear nuevos elementos
+php artisan make:model NuevoModelo -mcr    # Modelo + Migración + Controlador
+php artisan make:controller NuevoController # Nuevo controlador
+```
 
-## Documentación
+## 🚀 Despliegue
 
-La documentación completa del proyecto se encuentra en la carpeta `docs/`, incluyendo:
+### Requisitos del Servidor
+- PHP >= 8.1
+- Composer
+- MySQL >= 8.0
+- Nginx o Apache
+- SSL Certificate
 
-- [Auditoría de Código](docs/code_audit_2024.md)
-- [Estructura de Base de Datos](estructura_base_datos.md)
-- [Guía de Contribución](CONTRIBUTING.md)
+### Pasos de Despliegue
 
-## Seguridad
+1. Configurar el servidor web:
 
-Si descubres alguna vulnerabilidad de seguridad, por favor reportala a través de [issues](https://github.com/tu-usuario/gesbio/issues).
+```nginx
+# Nginx
+server {
+    listen 80;
+    server_name tu-dominio.com;
+    root /var/www/gesbio/public;
 
-## Licencia
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-Content-Type-Options "nosniff";
 
-Este proyecto está licenciado bajo la [Licencia MIT](https://opensource.org/licenses/MIT).
+    index index.php;
+
+    charset utf-8;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+
+    error_page 404 /index.php;
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+}
+```
+
+2. Optimizar para producción:
+```bash
+composer install --optimize-autoloader --no-dev
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+## 👥 Contribución
+
+1. Hacer fork del repositorio
+2. Crear una nueva rama:
+```bash
+git checkout -b feature/nueva-caracteristica
+```
+3. Realizar cambios y commit:
+```bash
+git commit -am 'feat: agregar nueva característica'
+```
+4. Push a la rama:
+```bash
+git push origin feature/nueva-caracteristica
+```
+5. Crear Pull Request
+
+### Convenciones de Código
+
+- Seguir PSR-12
+- Documentar métodos y clases
+- Escribir pruebas para nuevas características
+- Seguir convenciones de nombres de Laravel
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
+
+## 📞 Soporte
+
+Para reportar bugs o solicitar nuevas características, por favor:
+
+1. Revisar los [Issues existentes](https://github.com/Alfrevalve/Gesvitalpro/issues)
+2. Crear un nuevo Issue con toda la información relevante:
+   - Descripción detallada del problema
+   - Pasos para reproducir
+   - Comportamiento esperado
+   - Screenshots si aplica
